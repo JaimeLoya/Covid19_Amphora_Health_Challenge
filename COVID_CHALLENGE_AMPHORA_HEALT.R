@@ -45,7 +45,7 @@ write.csv(data_mexico,file="DATA_MEXICO_JULY2021.csv")
 data_arg<-read.csv("COVID_ARGENTINA.csv",encoding = "UTF-8")
 
 # SELECT SPECIFIC COLUMNS AND FILTER BY DATE OF SYMPTOMS, DATE OF DEATH, AGE AND IF THE PERSON DIED
-data_arg<-select(data_arg,id_evento_caso, sexo, edad, edad_años_meses,fecha_inicio_sintomas,fecha_fallecimiento,
+data_arg<-select(data_arg,id_evento_caso, sexo, edad, edad_aÃ±os_meses,fecha_inicio_sintomas,fecha_fallecimiento,
                    clasificacion_resumen, ultima_actualizacion,fallecido)%>%filter(fecha_inicio_sintomas!="" &
                                                                          fecha_inicio_sintomas>="2021-07-01"&
                                                                          fecha_inicio_sintomas<="2021-07-31"&
@@ -69,12 +69,12 @@ write.csv(data_arg,file="DATA_ARGENTINA_JULY2021.csv")
 data_colombia<-read.csv("COVID_COLOMBIA.csv",encoding = "UTF-8")
 # SELECT SPECIFIC COLUMNS WITH THE AIM TO REDUCE THE SIZE OF DATABASE AND CREATE A NEW DATA FRAME
 # THE COLOMBIAN DATABASE REGISTER THE DATE WITH TIME, I NEED PROCESS IT IDEPENDIENTLY
-data_colombia<-select(data_colombia,ID.de.caso,Sexo,Edad,Unidad.de.medida.de.edad,Fecha.de.inicio.de.síntomas,Fecha.de.muerte,
+data_colombia<-select(data_colombia,ID.de.caso,Sexo,Edad,Unidad.de.medida.de.edad,Fecha.de.inicio.de.sÃ­ntomas,Fecha.de.muerte,
                       Recuperado,fecha.reporte.web)%>%filter(Recuperado=="Fallecido"|
                                                                Recuperado=="fallecido",Edad>=0 & Edad<=100)
 
 #  CREATE A NEW COLUMN WITH THE DATE OF SYMTOMPS
-data_colombia$fecha_sintomas<-as.Date(str_split_fixed(data_colombia$Fecha.de.inicio.de.síntomas," ",2)[,1],format ="%d/%m/%Y" )
+data_colombia$fecha_sintomas<-as.Date(str_split_fixed(data_colombia$Fecha.de.inicio.de.sÃ­ntomas," ",2)[,1],format ="%d/%m/%Y" )
 # CREATE A NEW COLUMN WITH THE DATE OF DIE
 data_colombia$fecha_muerte<-as.Date(str_split_fixed(data_colombia$Fecha.de.muerte," ",2)[,1],format="%d/%m/%Y")
 # SELECT ONLY THE DATA FROM JULY 2021
@@ -100,7 +100,7 @@ data_merge_standarized<-data.frame(scale(data_merge))
 
 # Set the seed of R's random number generator, which is useful for creating simulations or random 
 # objects that can be reproduced.
-# Con el mismo número de seed el resultado siempre es el mismo
+# Con el mismo nÃºmero de seed el resultado siempre es el mismo
 estimate_wcss<-function(data){
   set.seed(1234)
   wcss <- vector()
@@ -109,7 +109,7 @@ estimate_wcss<-function(data){
   }
   return(wcss)
 }
-# ESTIMATE THE WITHIN-CLUSTER SUM OF SQUARES (WCSS) IN STANDARIZED AND NON-STANDARIZED DATA
+# ESTIMATE THE WITHIN-CLUSTER SUM OF SQUARES (WCSS) IN STANDARDIZED AND NON-STANDARDIZED DATA
 wcss_non_standarized<-estimate_wcss(data_merge_non_standarized)
 wcss_standarized<-estimate_wcss(data_merge_standarized)
 # SPECIFY HOW MANY GRAPHS TO PUT IN THE SAME IMAGE
@@ -178,7 +178,7 @@ cluster_non_standarized+cluster_standarized
 #SILHOUETTE < 0 EANS THAT THE OBSERVATIOS WAS PLACED IN THE WRONG CLUSTER.
 #SILHOUETTE = 0 EANS THAT THE OBSERVATIOS IS BETWEEN TWO CLUSTERS.
 
-# SILHOUETTE COEFFICIENTE TO CLUSTER VALIDATION (NON-STANDARIZED VALUES) 
+# SILHOUETTE COEFFICIENTE TO CLUSTER VALIDATION (NON-STANDARDIZED VALUES) 
 sil_non_standarized <- silhouette(data_merge_non_standarized$cluster, dist(data_merge_non_standarized))
 fviz_silhouette(sil_non_standarized)
 
@@ -212,7 +212,7 @@ data_mexico<-select(data_mexico,ID_REGISTRO,SEXO,NEUMONIA,DIABETES,EPOC,ASMA,INM
                            HIPERTENSION,CARDIOVASCULAR,OBESIDAD,RENAL_CRONICA,TABAQUISMO,OTRO_CASO)
 
 
-# CORRESPONDENCE ANALYSIS ACCORDIG TO Nenadi´c & Greenacre (2007)
+# CORRESPONDENCE ANALYSIS ACCORDIG TO NenadiÂ´c & Greenacre (2007)
 # https://www.jstatsoft.org/index.php/jss/article/view/v020i03/v20i03.pdf
 
 # SELECT VARIABLES FROM COVID DATABASE
@@ -234,7 +234,7 @@ P<-as.matrix(P) # CONVERT THE PROPORTION DATAFRAME AS MATRIX
 addmargins(P,c(1,2)) # ADD THE MARGINALS 
 rr<-margin.table(P,1) # CREATE A TABLE WITHE  THE MARGINALS IN ROWS
 cc<-margin.table(P,2) # CREATE A TABLE WITHE  THE MARGINALS IN COLUMNS
-S<-diag(rr^(-0.5))%*%(P-rr %*%t (cc)) %*% diag(cc^(-0.5)) # ESTIMATE THE RESIUDAL MATRIX (IT STANDARIZE THE DATA)
+S<-diag(rr^(-0.5))%*%(P-rr %*%t (cc)) %*% diag(cc^(-0.5)) # ESTIMATE THE RESIUDAL MATRIX (IT STANDARDIZE THE DATA)
 
 # STEP 2
 u<-svd(S)$u # VECTOR SINGULAR OF ROWS
@@ -248,7 +248,7 @@ FF<-diag(rr^(-0.5)) %*% u %*% Da #ESTIMATE COORDINATES OF ROWS
 GG<-diag(cc^(-0.5)) %*% v %*% Da #ESTIMATE COORDINATES OF COLUMNS
 
 # PLOT
-labels<-c("Mujer","Hombre","Con neumonía","Sin neumonía",
+labels<-c("Mujer","Hombre","Con neumonÃ­a","Sin neumonÃ­a",
           "Con EPOC","Sin EPOC")
 
 plot(GG[,1],GG[,2],type="n",xlim = c(-5,5),ylim=c(-3,3))
@@ -277,8 +277,8 @@ data_interes<-data_mexico%>%select(var_interes)
 N<-dummy_cols(data_interes,var_interes)
 N<-N[,-c(1:12)]
 
-colnames(N)<-c("Mujer","Hombre","Con.neumonía","Sin.neumonía","Con.diabetes","Sin.diabetes",
-               "Con.EPOC","Sin.EPOC","Con.asma","Sin.asma","Con.inmunosupresión","Sin.inmunosupresión",
+colnames(N)<-c("Mujer","Hombre","Con.neumonÃ­a","Sin.neumonÃ­a","Con.diabetes","Sin.diabetes",
+               "Con.EPOC","Sin.EPOC","Con.asma","Sin.asma","Con.inmunosupresiÃ³n","Sin.inmunosupresiÃ³n",
                "Con.hipertension","Sin.hipertension","Enfermedad.cardiovascular","Sin.enfermedad.cardiovascular",
                "Con.obesidad","Sin.obesidad","Insuficiencia.renal","Sin.insuficiencia.renal",
                "Tabaquismo","Sin.tabaquismo","Contacto.COVID", "Sin.contacto.COVID")

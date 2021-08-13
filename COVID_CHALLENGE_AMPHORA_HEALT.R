@@ -7,7 +7,7 @@ library(stringr)
 library(cluster)
 library(factoextra)
 
-# SET DE WORKING DIRECTORY
+# SET THE WORKING DIRECTORY
 setwd("D:\\AMPHORA")
 
 ################ 

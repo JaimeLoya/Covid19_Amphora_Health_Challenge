@@ -1,4 +1,4 @@
-,ID.de.caso,Sexo,Edad,Fecha.de.inicio.de.síntomas,Fecha.de.muerte,Recuperado,fecha.reporte.web,fecha_sintomas,fecha_muerte,days_before_die
+,ID.de.caso,Sexo,Edad,Fecha.de.inicio.de.sÃ­ntomas,Fecha.de.muerte,Recuperado,fecha.reporte.web,fecha_sintomas,fecha_muerte,days_before_die
 1,4307583,M,90,01/07/2021 00:00,03/07/2021 00:00,Fallecido,03/07/2021 00:00,01/07/2021,03/07/2021,2
 2,4307683,M,86,01/07/2021 00:00,04/07/2021 00:00,Fallecido,03/07/2021 00:00,01/07/2021,04/07/2021,3
 3,4308450,F,37,01/07/2021 00:00,13/07/2021 00:00,Fallecido,03/07/2021 00:00,01/07/2021,13/07/2021,12
